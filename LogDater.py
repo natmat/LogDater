@@ -2,16 +2,22 @@ from sys import exit
 import tkinter as tk
 from tkinter import filedialog, messagebox
 
-root = tk.Tk()
-root.withdraw()
-log_file = 'Logs/asdo-10.177.176.21.log'
-log_file = 'Logs/tmp.log'
-log_file = filedialog.askopenfilename(#
-    initialdir = "C:\Logs",
-    filetypes = (("log files","*.log"),("all files","*.*")))
-if not log_file:
-    tk.messagebox.showerror("Error", "Error: must select a log file")
-    exit(1)
+import sys
+print('len={}'.format(len(sys.argv)))
+if len(sys.argv) == 2:
+    log_file = sys.argv[1]
+else:
+    root = tk.Tk()
+    root.withdraw()
+    log_file = 'Logs/asdo-10.177.176.21.log'
+    log_file = 'Logs/tmp.log'
+    log_file = filedialog.askopenfilename(#
+        initialdir = "C:\Logs",
+        filetypes = (("log files","*.log"),("all files","*.*")))
+    if not log_file:
+        tk.messagebox.showerror("Error", "Error: must select a log file")
+        exit(1)
+
 print("Reading data from {}".format(log_file))
 
 # Open (in readonly) log_file file for parsing
