@@ -42,7 +42,9 @@ max_interval = 5 # If inter-line delay > max_interval, report the diff
 
 # Open (in readonly) log_file file for parsing
 log_data = open(log_file, 'r')
+output_log_data = open(log_file +'.csv', 'w')
 line_number = 1
+
 for line in log_data:
     # print('[{}] line: {}'.format(count, line))
     [the_datetime, this_line] = re.split('[\+]', line.strip(), 1)
@@ -57,6 +59,7 @@ for line in log_data:
 
         # print the line number and diff (s) in CSV
         print('{},{}'.format(line_number, diff))
+        output_log_data.writelines('{},{}'.format(line_number, diff))
         # input("Press Enter to continue...")
 
     time_now = datetime_object
@@ -64,3 +67,5 @@ for line in log_data:
     line_number += 1
 
     # input("Press Enter to continue...")
+
+output_log_data.close()
