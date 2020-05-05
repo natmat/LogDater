@@ -24,7 +24,6 @@ Usage: LogDater [logfile]...
 Use either the cmd ine arg file, or open file chooser
 '''
 import sys
-print('len={}'.format(len(sys.argv)))
 if len(sys.argv) == 2:
     log_file = sys.argv[1]
 else:
@@ -43,7 +42,7 @@ max_interval = 5 # If inter-line delay > max_interval, report the diff
 
 # Open (in readonly) log_file file for parsing
 log_data = open(log_file, 'r')
-line = 1
+line_number = 1
 for line in log_data:
     # print('[{}] line: {}'.format(count, line))
     [the_datetime, this_line] = re.split('[\+]', line.strip(), 1)
@@ -57,11 +56,11 @@ for line in log_data:
         # print('diff  = {}s'.format(time.strftime('%H:%M:%S', time.gmtime(diff))))
 
         # print the line number and diff (s) in CSV
-        print('{},{}'.format(line, diff))
+        print('{},{}'.format(line_number, diff))
         # input("Press Enter to continue...")
 
     time_now = datetime_object
     previous_line = this_line
-    line += 1
+    line_number += 1
 
     # input("Press Enter to continue...")
