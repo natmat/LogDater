@@ -47,6 +47,7 @@ log_file_date_time_format = '%Y-%m-%dT%H:%M:%S'
 
 [time_now_object, rest_of_line] = re.split('[\+]', log_data.readline().strip(), 1)
 time_now = datetime.strptime(time_now_object, log_file_date_time_format)
+start_time = time_now
 # time_now = datetime(2020, 1, 1)
 
 log_data.seek(0)
@@ -64,8 +65,9 @@ for line in log_data:
         # print('diff  = {}s'.format(time.strftime('%H:%M:%S', time.gmtime(diff))))
 
         # print the line number and diff (s) in CSV
-        print('{},{}'.format(line_number, diff))
-        output_log_data.writelines('{},{}\n'.format(line_number, diff))
+        run_time = (datetime_object - start_time).total_seconds()
+        print('{},{},{}'.format(line_number, run_time,diff))
+        output_log_data.writelines('{},{},{}\n'.format(line_number, run_time,diff))
         # input("Press Enter to continue...")
 
     time_now = datetime_object
