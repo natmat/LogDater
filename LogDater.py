@@ -46,8 +46,8 @@ line_number = 1
 log_file_date_time_format = '%Y-%m-%dT%H:%M:%S'
 
 [time_now_object, rest_of_line] = re.split('[\+]', log_data.readline().strip(), 1)
-time_now = datetime.strptime(time_now_object, log_file_date_time_format)
-start_time = time_now
+prev_datetime = datetime.strptime(time_now_object, log_file_date_time_format)
+start_time = prev_datetime
 # time_now = datetime(2020, 1, 1)
 
 log_data.seek(0)
@@ -55,22 +55,22 @@ log_data.seek(0)
 for line in log_data:
     # print('[{}] line: {}'.format(count, line))
     [the_datetime, this_line] = re.split('[\+]', line.strip(), 1)
-    datetime_object = datetime.strptime(the_datetime, log_file_date_time_format)
+    current_datetime = datetime.strptime(the_datetime, log_file_date_time_format)
     # print('datetime_object={}'.format(datetime_object))
 
-    diff = (datetime_object - time_now).total_seconds()
+    diff = (current_datetime - prev_datetime).total_seconds()
     if diff > max_interval:
-        # print('        {} {}'.format(datetime_object, this_line))
-        # print('{:06d}: {} {}'.format(count, datetime_object, before_line))
+        print('        {} {}'.format(current_datetime, this_line))
+        print('{:06d}: {} {}'.format(line_number, prev_datetime, previous_line))
         # print('diff  = {}s'.format(time.strftime('%H:%M:%S', time.gmtime(diff))))
 
         # print the line number and diff (s) in CSV
-        run_time = (datetime_object - start_time).total_seconds()
+        run_time = (current_datetime - start_time).total_seconds()
         print('{},{},{}'.format(line_number, run_time,diff))
         output_log_data.writelines('{},{},{}\n'.format(line_number, run_time,diff))
         # input("Press Enter to continue...")
 
-    time_now = datetime_object
+    prev_datetime = current_datetime
     previous_line = this_line
     line_number += 1
 
